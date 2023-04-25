@@ -32,7 +32,8 @@ ejercicios indicados.
 - Analice el script `wav2lp.sh` y explique la misión de los distintos comandos involucrados en el *pipeline*
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
-      > * sox: ```bash sox $inputfile -t raw -e signed -b 16 - | $X2X +sf```
+      > 
+        * sox: ```bash sox $inputfile -t raw -e signed -b 16 - | $X2X +sf```
           Convierte la señal de entrada a reales en coma flotante de 32 bits sin cabecera (raw), y escribe el resultado en la salida estándar. 
 
         * X2X: 
