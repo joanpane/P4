@@ -32,11 +32,37 @@ ejercicios indicados.
 - Analice el script `wav2lp.sh` y explique la misión de los distintos comandos involucrados en el *pipeline*
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
-      > 
-        * sox: ```bash sox $inputfile -t raw -e signed -b 16 - | $X2X +sf```
-          Convierte la señal de entrada a reales en coma flotante de 32 bits sin cabecera (raw), y escribe el resultado en la salida estándar. 
 
-        * X2X: 
+  ```bash 
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 | $LPC -l 240 -m $lpc_order > $base.lp || exit 1
+  ```
+
+    >### sox: 
+    >Convierte la señal de entrada a reales en coma flotante de 16 bits sin cabecera (raw), y escribe el resultado en la salida estándar. 
+    >- -t: Tipo de fichero de audio (raw).
+    >- -e: Tipo de codificación (signed).
+    >- -b: Tamaño de la muestra codificada, en bits. (16)
+
+    >### $X2X: 
+    >Programa de SPTK que permite la conversión entre distintos formatos de datos. Hacemos esta operación en dos pasos porque x2x no permite leer ficheros en formato WAVE (o cualquier otro, solo permite RAW). En este caso +sf indica s (short, 2byte) y  f (float, 4byte).
+
+    >### $FRAME: 
+    >Divide la señal de entrada en tramas de 240 muestras (30 ms) con desplazamiento de ventana de 80 muestras (10 ms). Tener en cuenta que la frecuencia de muestreo es de 8 kHz.
+    >- -l: frame length (240).
+    >- -p: frame period (80).
+
+    >### $WINDOW: 
+    >Multiplica cada trama por la ventana de Blackman (opción por defecto).
+    >- -l: frame length of input (240).
+    >- -L: frame length of output (240).
+
+    >### $LPC: 
+    >Calcula los lpc_order primeros coeficientes de predicción lineal, precedidos por el factor de ganancia del predictor.
+    >- -l: frame length (240)
+    >- -m: order of LPC ($lpc_order)
+
+    .
+    >Vemos como finalmente el resultado del pipeline se redirecciona a un fichero temporal $base.lp, cuyo nombre es el mismo que el del script seguido del identificador del proceso (de este modo se consigue un fichero temporal único para cada ejecución).
 
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 51 del script `wav2lp.sh`).
