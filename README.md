@@ -66,14 +66,43 @@ ejercicios indicados.
 
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 51 del script `wav2lp.sh`).
+  ```bash 
+    # Main command for feature extration
+    sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+    $LPC -l 240 -m $lpc_order > $base.lp || exit 1
+   
+
+    # Our array files need a header with the number of cols and rows:
+    ncol=$((lpc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
+    nrow=`$X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
+
+    # Build fmatrix file by placing nrow and ncol in front, and the data after them
+    echo $nrow $ncol | $X2X +aI > $outputfile
+    cat $base.lp >> $outputfile 
+  ```
+
+  >Una vez almacenado el resultado de la parametrización en un fichero temporal ($base.lp), hemos de almacenar la información en un fichero fmatrix. 
+  >- Numero de columnas = orden del predictor + 1. Hace falta añadir 1 ya que en el primer elemento del vector se almacena la ganancia de predicción -> (gain a1 a2 ... ap)
+  >- Numero de filas. Las extraemos del fichero obtenido. Lo hacemos convirtiendo la señal parametrizada a texto usando sox +fa, y contando el número de líneas, con el comando UNIX wc -l.
+  Esta obtención del número de filas depende de la logintud de la señal, la longitud y desplazamiento de la ventana, y la cadena de comandos que se ejecutan para obtener la parametrización.
 
   * ¿Por qué es más conveniente el formato *fmatrix* que el SPTK?
+  >Utilizando este formato se puede pasar de una señal de entrada que es un señal unidimensional (un vector) con las muestras de la señal de audio a una matriz en la que se tiene un fácil y rápido acceso a todos los datos almacenados. 
+  >Además, tienen una correspondencia directa entre la posición en la matriz y el orden del coeficiente y número de trama, por lo que simplifica mucho su manipulación a la hora de trabajar. También ofrece información directa en la cabecera sobre el número de tramas y de coeficientes calculados
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
+  ```bash 
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+	$LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $cepstrum_order> $base.lpcc || exit 1
+  ```
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
+  ```bash 
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+	$MFCC -l 240 -m $mfcc_order -n $filter_bank_order -s $freq > $base.mfcc|| exit 1
+  ```
 
 ### Extracción de características.
 
