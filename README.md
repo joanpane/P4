@@ -92,6 +92,7 @@ ejercicios indicados.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
+  >Este es el pipeline principal:
   ```bash 
   sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
 	$LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $cepstrum_order> $base.lpcc || exit 1
@@ -99,6 +100,7 @@ ejercicios indicados.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
+  >Este es el pipeline principal:
   ```bash 
   sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
 	$MFCC -l 240 -m $mfcc_order -n $filter_bank_order -s $freq > $base.mfcc|| exit 1
@@ -108,17 +110,58 @@ ejercicios indicados.
 
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
+
+  ![imagen](grafics/LPC.png)
+  ![imagen](grafics/LPCC.png)
+  ![imagen](grafics/MFCC.png)
   
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+    >Primero ha sido necesario dar permiso de ejecución a los dos archivos creados para lpcc (/home/joan/PAV/bin/wav2lpcc) y mfcc (/home/joan/PAV/bin/wav2mfcc). Lo hemos hecho mediante las ordenes: 
+    ```bash 
+    chmod +x /home/joan/PAV/bin/wav2lpcc #Para lpcc
+    chmod +x /home/joan/PAV/bin/wax2mfcc #Para mfcc
+    ```
+    >Después hemos ejecutamos el script run_spkid para cada predicción. Éste nos calcula todas las predicciones de cada interlocutor y frase y los guarda en la carpeta 'work/(prediccion)/(Interlocutor)/(frase)':
+    ```bash 
+    FEAT=lp /home/joan/PAV/bin/run_spkid lp     #Para lpc
+    FEAT=lpcc /home/joan/PAV/bin/run_spkid lpcc #Para lpcc
+    FEAT=mfcc /home/joan/PAV/bin/run_spkid mfcc #Para mfcc
+    ```
+    >Luego guardamos en un archivo (prediccion).txt situado en la carpeta grafics/ los coeficientes correspondientes a a(2) y a(3) para después hacer las gràficas. En nuestro caso lo hacemos con el interlocutor y frase BLOCK01 y SES013.
+    ```bash 
+    fmatrix_show work/lp/BLOCK01/SES013/*.lp | egrep '^\[' | cut -f4,5 > grafics/lp.txt    #Para lpc
+    fmatrix_show work/lpcc/BLOCK01/SES013/*.lpcc | egrep '^\[' | cut -f4,5 > grafics/lpcc.txt #Para lpcc
+    fmatrix_show work/mfcc/BLOCK01/SES013/*.mfcc | egrep '^\[' | cut -f4,5 > grafics/mfcc.txt #Para mfcc
+    ```
+    >Finalmente, usamos Matlab para representar las gràficas de cada una de las predicciones cambiando el archivo .txt de entrada:
+    ```matlab 
+    I = importdata('lpcc.txt');
+    figure
+    plot(I(:,1),I(:,2),'.')
+    grid on
+    xlabel('a(2)')
+    ylabel('a(3)')
+    title('LPCC')
+    ```
+
+
   + ¿Cuál de ellas le parece que contiene más información?
+  >La gráfica que parece que contiene más información es la del MFCC seguida del LPCC ya que se notan mucho más incorreladas que en la LPC. Esto aporta una mayor entropia y por tanto más información. 
+  En cambio en la gráfica del LP vemos como están muy correlados y juntos y por tanto nos nos aporta demasiada información (No hay mucha dispersión).
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
 
+  ```bash 
+  pearson work/lp/BLOCK01/SES013/*.lp
+  pearson work/lpcc/BLOCK01/SES013/*.lpcc
+  pearson work/mfcc/BLOCK01/SES013/*.mfcc
+  ```
+
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+  | &rho;<sub>x</sub>[2,3] | -0,812152     | 0,223452 | 0,0771908   |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
