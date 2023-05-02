@@ -31,8 +31,8 @@ namespace upc
 		inv_sigma.resize(nmix, vector_size);
 	}
 
-								 /* log(1 / sqrt(2 * PI)) */
-	#define CTTE_GAUSSIAN -0.9189385332046727
+
+	#define CTTE_GAUSSIAN -0.9189385332046727 /* log(1 / sqrt(2 * PI)) */
 
 	/*
 	 Use this function to compute log(x+y) from logx and logy:
@@ -112,6 +112,8 @@ namespace upc
 
 		for (n=0; n<data.nrow(); ++n) {
 			/// \TODO Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
+			//DONE
+			lprob += this->gmm_logprob(data[n]);
 		}
 		return lprob/data.nrow();
 	}
@@ -146,20 +148,16 @@ namespace upc
 			for (k=0; k < nmix; ++k) {
 				w[k] +=  weights[n][k];
 				for (j=0; j < vector_size; ++j) {
-								 /* sum{x w_i} */
-					mu[k][j] += weights[n][k] * data[n][j];
-								 /* sum{x^2 w_i} */
-					inv_sigma[k][j] += weights[n][k] * data[n][j] * data[n][j];
+					mu[k][j] += weights[n][k] * data[n][j]; /* sum{x w_i} */
+					inv_sigma[k][j] += weights[n][k] * data[n][j] * data[n][j]; /* sum{x^2 w_i} */
 				}
 			}
 		}
 		for (k=0; k < nmix; ++k) {
 			for (j=0; j < vector_size; ++j) {
-				mu[k][j] /= w[k];/* sum{x w_i}/sum{w_i} */
-								 /* sum{x^2 w_i}/sum{w_i} */
-				inv_sigma[k][j] /= w[k];
-								 /* 1/sigma */
-				inv_sigma[k][j] = 1.0F/sqrt(inv_sigma[k][j] - mu[k][j]*mu[k][j]);
+				mu[k][j] /= w[k]; /* sum{x w_i}/sum{w_i} */
+				inv_sigma[k][j] /= w[k]; /* sum{x^2 w_i}/sum{w_i} */
+				inv_sigma[k][j] = 1.0F/sqrt(inv_sigma[k][j] - mu[k][j]*mu[k][j]); /* 1/sigma */
 			}
 			w[k] /=  data.nrow();
 		}
@@ -213,6 +211,15 @@ namespace upc
 			//
 			// Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
 			// increase more than inc_threshold.
+			//DONE
+			new_prob = this->em_expectation(data, weights); //devuelve la log probabilidad del material de entrenamiento
+			inc_prob = new_prob-old_prob;
+			old_prob = new_prob;
+			if(inc_prob < inc_threshold){
+				break;
+			}
+			this->em_maximization(data, weights);
+
 			if (verbose & 01)
 				cout << "GMM nmix=" << nmix << "\tite=" << iteration << "\tlog(prob)=" << new_prob << "\tinc=" << inc_prob << endl;
 		}
@@ -233,8 +240,7 @@ namespace upc
 		int sign;
 		float r;
 		for (j=0; j<vector_size; ++j) {
-								 /* r: (-1,1) */
-			r = (float) 2.0F *rand()/(float) RAND_MAX - 1.0F;
+			r = (float) 2.0F *rand()/(float) RAND_MAX - 1.0F; /* r: (-1,1) */
 			sign = (r > 0 ? 1 : -1);
 
 			mu[dest][j] = mu[src][j] + sign * 0.5/inv_sigma[src][j];
@@ -279,8 +285,7 @@ namespace upc
 		fmatrix weights(data.nrow(), nmix);
 		weights.reset();
 		for (n=0; n < data.nrow(); ++n) {
-								 /* r: [0,1] */
-			float r = (float) rand()/(float) RAND_MAX;
+			float r = (float) rand()/(float) RAND_MAX; /* r: [0,1] */
 			k = (int) (nmix * r);
 			if (k == nmix) k = nmix-1;
 			weights[n][k] = 1.0F;

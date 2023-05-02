@@ -48,12 +48,10 @@ namespace upc
 			upc::fvector w;		 ///< w[i]: weight of Mixture i
 			upc::fmatrix mu,	 ///< mu[i]: mean of Mixture i (vector: mu[i][0] ... mu[i][vector_size-1])
 				inv_sigma;		 ///< inv_sigma[i]: inverse of sigma of mixture i (vector, assuming diagonal covariance)
+								 
+			upc::fvector global_inv_sigma; ///< used in vq, to define weighted euclidean distance
 
-								 ///< used in vq, to define weighted euclidean distance
-			upc::fvector global_inv_sigma;
-
-								 ///< compute logprob of input vector x
-			float gmm_logprob(const float *x) const;
+			float gmm_logprob(const float *x) const; ///< compute logprob of input vector x
 
 		public:
 			///Default contructor

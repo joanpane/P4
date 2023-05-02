@@ -11,7 +11,7 @@ using namespace upc;
 const string DEF_INPUT_EXT = "mcp";
 const unsigned int DEF_ITERATIONS = 20;
 const float DEF_THR = 1e-3;
-const unsigned int DEF_NMIXTURES = 5;
+const unsigned int DEF_NMIXTURES = 33;
 const string DEF_GMMFILE = "output.gmm";
 
 int read_data(const string & input_directory, const string & input_extension,
@@ -55,18 +55,25 @@ int main(int argc, const char *argv[])
 	///
 	/// Other alternatives are: vq, em_split... See the options of the program and place each
 	/// initicialization accordingly.
+	//DONE
 	switch (init_method) {
 		case 0:
+			gmm.random_init(data, nmix);
 			break;
 		case 1:
+			gmm.vq_lbg(data, nmix, init_iterations, init_threshold, verbose);
 			break;
 		case 2:
+			gmm.em_split(data, nmix, init_iterations, init_threshold, verbose);
 			break;
 		default:
+			gmm.random_init(data, nmix);
 			;
 	}
 
 	/// \TODO Apply EM to estimate GMM parameters (complete the funcion in gmm.cpp)
+	//DONE
+  	gmm.em(data,em_iterations,em_threshold,verbose);
 
 	//Create directory, if it is needed
 	gmm_filename.checkDir();

@@ -144,6 +144,26 @@ ejercicios indicados.
     ylabel('a(3)')
     title('LPCC')
     ```
+    >Mediante Python lo hacemos de la siguiente manera:
+    ```python 
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Cargar los datos desde el archivo de texto
+    data = np.loadtxt('lp.txt')
+
+    # Separar los datos en dos arrays
+    x = data[:, 0]
+    y = data[:, 1]
+
+    # Hacer el gráfico
+    plt.scatter(x, y, s=4, marker='o')
+    plt.xlabel('X Label')
+    plt.ylabel('Y Label')
+    plt.title('LP')
+    plt.show()
+    ```
+
 
 
   + ¿Cuál de ellas le parece que contiene más información?
@@ -164,8 +184,10 @@ ejercicios indicados.
   | &rho;<sub>x</sub>[2,3] | -0,812152     | 0,223452 | 0,0771908   |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
-  
+  >Los resultados concuerdan con las gráficas y con la explicación anterior ya que comprobamos que de mayor a menor correlación siguen el orden: LPC, LPCC, MFCC. Por tanto la MFCC es la menos correlada, más dispersa.  
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+>LPCC: de 8 a 12 coeficientes de predicción (P) y (3/2)P coeficientes cepstrales (Q).
+>MFCC: Se usan entre 14 y 18 coeficientes para reconocimiento del hablante. Se suele usar un banco de 24 a 40 filtros paso-banda en la escala Mel, aunque también se obtienen buenos resultados con 20.
 
 ### Entrenamiento y visualización de los GMM.
 
@@ -173,6 +195,7 @@ Complete el código necesario para entrenar modelos GMM.
 
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
   para sus dos primeros coeficientes de MFCC.
+  ![imagen](grafics/GMM_SES003.png)
 
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
