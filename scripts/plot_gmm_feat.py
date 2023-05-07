@@ -91,7 +91,7 @@ def limsGMM(means, covs, fStd=3):
 
     return min_, max_
 
-def plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm, colorPoblacion, filesFeat=None, colorFeat=None, limits=None, subplot=111):
+def plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm, colorPoblacion, filesFeat=None, colorFeat=None, limits=None):
     subplotting=[221,222,223,224]
     for subplotting in subplotting:
         subplot=subplotting 
@@ -241,6 +241,6 @@ if __name__ == '__main__':
         limits = None
 
     
-    plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm, colorPoblacion, filesFeat, colorFeat, limits, subplot=111)
+    plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm, colorPoblacion, filesFeat, colorFeat, limits)
     
 

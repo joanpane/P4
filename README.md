@@ -200,6 +200,8 @@ Complete el código necesario para entrenar modelos GMM.
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
+  >Falta insertar la gráfica que demoment no he sapigut fer
+
 
 ### Reconocimiento del locutor.
 
@@ -207,6 +209,9 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+  |                        | LP   | LPCC | MFCC |
+  |------------------------|:----:|:----:|:----:|
+  | tasa de error          |      |      |      |
 
 ### Verificación del locutor.
 

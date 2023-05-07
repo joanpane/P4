@@ -9,7 +9,13 @@ x = data[:, 0]
 y = data[:, 1]
 
 # Hacer el gráfico
-plt.scatter(x, y, s=4, marker='o')
+plt.scatter(x, y, s=4, marker='o', subplot = 121)
+plt.xlabel('X Label')
+plt.ylabel('Y Label')
+plt.title('LP')
+
+# Hacer el gráfico
+plt.scatter(x, y, s=4, marker='o', subplot = 122)
 plt.xlabel('X Label')
 plt.ylabel('Y Label')
 plt.title('LP')
