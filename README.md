@@ -86,7 +86,8 @@ ejercicios indicados.
   Esta obtención del número de filas depende de la logintud de la señal, la longitud y desplazamiento de la ventana, y la cadena de comandos que se ejecutan para obtener la parametrización.
 
   * ¿Por qué es más conveniente el formato *fmatrix* que el SPTK?
-    >Utilizando este formato se puede pasar de una señal de entrada que es un señal unidimensional (un vector) con las muestras de la señal de audio a una matriz en la que se tiene un fácil y rápido acceso a todos los datos almacenados. 
+
+    > Utilizando este formato se puede pasar de una señal de entrada que es un señal unidimensional (un vector) con las muestras de la señal de audio a una matriz en la que se tiene un fácil y rápido acceso a todos los datos almacenados. 
     Además, tienen una correspondencia directa entre la posición en la matriz y el orden del coeficiente y número de trama, por lo que simplifica mucho su manipulación a la hora de trabajar. También ofrece información directa en la cabecera sobre el número de tramas y de coeficientes calculados
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
@@ -143,7 +144,7 @@ ejercicios indicados.
     ylabel('a(3)')
     title('LPCC')
     ```
-    >Mediante Python lo hacemos de la siguiente manera:
+    >Mediante Python lo podemos hacer de la siguiente manera:
     ```python 
     import numpy as np
     import matplotlib.pyplot as plt
@@ -166,8 +167,8 @@ ejercicios indicados.
 
 
   + ¿Cuál de ellas le parece que contiene más información?
-  >La gráfica que parece que contiene más información es la del MFCC seguida del LPCC ya que se notan mucho más incorreladas que en la LPC. Esto aporta una mayor entropia y por tanto más información. 
-  En cambio en la gráfica del LP vemos como están muy correlados y juntos y por tanto nos nos aporta demasiada información (No hay mucha dispersión).
+    >La gráfica que parece que contiene más información es la del MFCC seguida del LPCC ya que se notan mucho más incorreladas que en la LPC. Esto aporta una mayor entropia y por tanto más información. 
+    En cambio en la gráfica del LP vemos como están muy correlados y juntos y por tanto nos nos aporta demasiada información (No hay mucha dispersión).
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
