@@ -61,7 +61,6 @@ ejercicios indicados.
     >- -l: frame length (240)
     >- -m: order of LPC ($lpc_order)
 
-    .
     >Vemos como finalmente el resultado del pipeline se redirecciona a un fichero temporal $base.lp, cuyo nombre es el mismo que el del script seguido del identificador del proceso (de este modo se consigue un fichero temporal único para cada ejecución).
 
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
@@ -87,8 +86,8 @@ ejercicios indicados.
   Esta obtención del número de filas depende de la logintud de la señal, la longitud y desplazamiento de la ventana, y la cadena de comandos que se ejecutan para obtener la parametrización.
 
   * ¿Por qué es más conveniente el formato *fmatrix* que el SPTK?
-  >Utilizando este formato se puede pasar de una señal de entrada que es un señal unidimensional (un vector) con las muestras de la señal de audio a una matriz en la que se tiene un fácil y rápido acceso a todos los datos almacenados. 
-  >Además, tienen una correspondencia directa entre la posición en la matriz y el orden del coeficiente y número de trama, por lo que simplifica mucho su manipulación a la hora de trabajar. También ofrece información directa en la cabecera sobre el número de tramas y de coeficientes calculados
+    >Utilizando este formato se puede pasar de una señal de entrada que es un señal unidimensional (un vector) con las muestras de la señal de audio a una matriz en la que se tiene un fácil y rápido acceso a todos los datos almacenados. 
+    Además, tienen una correspondencia directa entre la posición en la matriz y el orden del coeficiente y número de trama, por lo que simplifica mucho su manipulación a la hora de trabajar. También ofrece información directa en la cabecera sobre el número de tramas y de coeficientes calculados
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
@@ -122,13 +121,13 @@ ejercicios indicados.
     chmod +x /home/joan/PAV/bin/wav2lpcc #Para lpcc
     chmod +x /home/joan/PAV/bin/wax2mfcc #Para mfcc
     ```
-    >Después hemos ejecutamos el script run_spkid para cada predicción. Éste nos calcula todas las predicciones de cada interlocutor y frase y los guarda en la carpeta 'work/(prediccion)/(Interlocutor)/(frase)':
+    >Después hemos ejecutamos el script run_spkid para cada predicción. Éste nos calcula todas las predicciones de cada interlocutor y frase y los guarda en la carpeta 'work/(prediccion)/(Bloque)/(Interlocutor)/(frase)':
     ```bash 
     FEAT=lp /home/joan/PAV/bin/run_spkid lp     #Para lpc
     FEAT=lpcc /home/joan/PAV/bin/run_spkid lpcc #Para lpcc
     FEAT=mfcc /home/joan/PAV/bin/run_spkid mfcc #Para mfcc
     ```
-    >Luego guardamos en un archivo (prediccion).txt situado en la carpeta grafics/ los coeficientes correspondientes a a(2) y a(3) para después hacer las gràficas. En nuestro caso lo hacemos con el interlocutor y frase BLOCK01 y SES013.
+    >Luego guardamos en un archivo (prediccion).txt situado en la carpeta grafics/ los coeficientes correspondientes a a(2) y a(3) para después hacer las gràficas. En nuestro caso lo hacemos con el interlocutor SES013.
     ```bash 
     fmatrix_show work/lp/BLOCK01/SES013/*.lp | egrep '^\[' | cut -f4,5 > grafics/lp.txt    #Para lpc
     fmatrix_show work/lpcc/BLOCK01/SES013/*.lpcc | egrep '^\[' | cut -f4,5 > grafics/lpcc.txt #Para lpcc
