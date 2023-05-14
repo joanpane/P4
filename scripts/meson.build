@@ -3,6 +3,7 @@
 scripts = [
     'run_spkid.sh',
     'plot_gmm_feat.py',
+    'plot_gmm_feat_doble.py',
     'spk_verif_score.pl',
     'wav2lp.sh',
     'wav2lpcc.sh',

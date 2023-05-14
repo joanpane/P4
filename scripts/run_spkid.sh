@@ -17,6 +17,7 @@ set -o pipefail
 # - name_exp: name of the experiment
 # - db_devel: directory of the speecon database used during development
 # - db_test:  directory of the database used in the final test
+# \DONE
 lists=lists
 w=work
 name_exp=one
@@ -36,10 +37,10 @@ TEMP_VERIF=$w/temp_${FEAT}_${name_exp}.log
 
 
 #Parametros para entrenar GMM
-TO_init_method=2         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
+TO_init_method=1         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
 TO_LogProb_th_fin=1.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
 TO_Num_it_fin=60        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
-TO_nmix=62               #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
+TO_nmix=20               #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
 
 TRAIN_OPTS="-i $TO_init_method -T $TO_LogProb_th_fin -N $TO_Num_it_fin -m $TO_nmix"
 # ------------------------
@@ -83,7 +84,7 @@ fi
 # \TODO
 # Create your own features with the name compute_$FEAT(), where $FEAT is the name of the feature.
 # - Select (or change) different features, options, etc. Make you best choice and try several options.
-#DONE
+# \DONE
 
 compute_lp() {
     db=$1
@@ -142,7 +143,7 @@ for cmd in $*; do
        ## @file
        # \TODO
        # Select (or change) good parameters for gmm_train
-       #DONE: with optim_train.sh
+       # \DONE: with optim_train.sh
        for dir in $db_devel/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
@@ -172,7 +173,7 @@ for cmd in $*; do
        # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
        #
        # - The name of the world model will be used by gmm_verify in the 'verify' command below.
-       #DONE
+       # \DONE
        gmm_train  -v 1 $WORLD_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
 
    elif [[ $cmd == verify ]]; then
@@ -184,7 +185,7 @@ for cmd in $*; do
        #   For instance:
        #   * <code> gmm_verify ... > $LOG_VERIF </code>
        #   * <code> gmm_verify ... | tee $LOG_VERIF </code>
-       #DONE
+       # \DONE
        gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world lists/gmm.list lists/verif/all.test lists/verif/all.test.candidates | tee $w/verif_${FEAT}_${name_exp}.log
 
    elif [[ $cmd == verifyerr ]]; then

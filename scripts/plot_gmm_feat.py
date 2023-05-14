@@ -91,98 +91,58 @@ def limsGMM(means, covs, fStd=3):
 
     return min_, max_
 
-def plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm, colorPoblacion, filesFeat=None, colorFeat=None, limits=None):
-    subplotting=[221,222,223,224]
-    for subplotting in subplotting:
-        subplot=subplotting 
-        if subplotting==221:
-            colorGmm='red'
-            colorPoblacion='red'
-            fileTXT = fileTXT
-            fileGMM = fileGMM
-        if subplotting==222:
-            colorGmm='red'
-            colorPoblacion='blue'
-            fileTXT = fileTXT2
-            fileGMM = fileGMM
-        if subplotting==223:
-            colorGmm='blue'
-            colorPoblacion='red'
-            fileTXT = fileTXT
-            fileGMM = fileGMM2
-        if subplotting==224:
-            colorGmm='blue'
-            colorPoblacion='blue'
-            fileTXT = fileTXT2
-            fileGMM = fileGMM2
+def plotGMM(fileGMM, xDim, yDim, percents, colorGmm, filesFeat=None, colorFeat=None, limits=None, subplot=111):
+    weights, means, covs = read_gmm(fileGMM)
 
+    ax = plt.subplot(subplot)
+    if filesFeat:
+        feats = np.ndarray((0, 2))
+        for fileFeat in filesFeat:
+            feat = read_fmatrix(fileFeat)
+            feat = np.stack((feat[..., xDim], feat[..., yDim]), axis=-1)
+            feats = np.concatenate((feats, feat))
 
-        weights, means, covs = read_gmm(fileGMM)
+        ax.scatter(feats[:, 0], feats[:, 1], .05, color=colorFeat)
 
-        ax = plt.subplot(subplot)
-        if filesFeat:
-            feats = np.ndarray((0, 2))
-            for fileFeat in filesFeat:
-                feat = read_fmatrix(fileFeat)
-                feat = np.stack((feat[..., xDim], feat[..., yDim]), axis=-1)
-                feats = np.concatenate((feats, feat))
+    means = np.stack((means[..., xDim], means[..., yDim]), axis=-1)
+    covs = np.stack((covs[..., xDim], covs[..., yDim]), axis=-1)
 
-            ax.scatter(feats[:, 0], feats[:, 1], .05, color=colorFeat)
+    if not limits:
+        min_, max_ = limsGMM(means, covs)
+        limits = (min_[0], max_[0], min_[1], max_[1])
+    else:
+        min_, max_ = (limits[0], limits[2]), (limits[1], limits[3])
 
-        means = np.stack((means[..., xDim], means[..., yDim]), axis=-1)
-        covs = np.stack((covs[..., xDim], covs[..., yDim]), axis=-1)
+    # Fijamos el número de muestras de manera que el valor esperado de muestras
+    # en el percentil más estrecho sea 1000. Calculamos el más estrecho como el
+    # valor mínimo de p*(1-p)
 
-        if not limits:
-            min_, max_ = limsGMM(means, covs)
-            limits = (min_[0], max_[0], min_[1], max_[1])
-        else:
-            min_, max_ = (limits[0], limits[2]), (limits[1], limits[3])
+    numSmp = int(np.ceil(np.max(1000 / (percents * (1 - percents))) ** 0.5))
 
-        # Fijamos el número de muestras de manera que el valor esperado de muestras
-        # en el percentil más estrecho sea 1000. Calculamos el más estrecho como el
-        # valor mínimo de p*(1-p)
+    x = np.linspace(min_[0], max_[0], numSmp)
+    y = np.linspace(min_[1], max_[1], numSmp)
+    X, Y = np.meshgrid(x, y)
 
-        numSmp = int(np.ceil(np.max(1000 / (percents * (1 - percents))) ** 0.5))
+    XX = np.array([X.ravel(), Y.ravel()]).T
 
-        x = np.linspace(min_[0], max_[0], numSmp)
-        y = np.linspace(min_[1], max_[1], numSmp)
-        X, Y = np.meshgrid(x, y)
+    Z = pdfGMM(XX, weights, means, covs)
+    Z /= sum(Z)
+    Zsort = np.sort(Z)
+    Zacum = Zsort.cumsum()
+    levels = [Zsort[np.where(Zacum > 1 - percent)[0][0]] for percent in percents]
 
-        XX = np.array([X.ravel(), Y.ravel()]).T
+    Z = Z.reshape(X.shape)
 
-        Z = pdfGMM(XX, weights, means, covs)
-        Z /= sum(Z)
-        Zsort = np.sort(Z)
-        Zacum = Zsort.cumsum()
-        levels = [Zsort[np.where(Zacum > 1 - percent)[0][0]] for percent in percents]
+    style = {'colors': [colorGmm] * len(percents), 'linestyles': ['dotted', 'solid']}
 
-        Z = Z.reshape(X.shape)
+    CS = ax.contour(X, Y, Z, levels=levels, **style)
+    fmt = {levels[i]: f'{percents[i]:.0%}' for i in range(len(levels))}
+    ax.clabel(CS, inline=1, fontsize=14, fmt=fmt)
 
-        style = {'colors': [colorGmm] * len(percents), 'linestyles': ['dotted', 'solid']}
-
-        CS = ax.contour(X, Y, Z, levels=levels, **style)
-        fmt = {levels[i]: f'{percents[i]:.0%}' for i in range(len(levels))}
-        ax.clabel(CS, inline=1, fontsize=14, fmt=fmt)
-
-        plt.title(f'Region coverage predicted by {fileGMM}')
-        plt.axis('tight')
-        plt.axis(limits)
-
-
-
-        ##PLOT DE LA POBLACION DEL ARCHIVO TXT
-        # Cargar los datos desde el archivo de texto
-        datapoblacio = np.loadtxt(fileTXT)
-
-        # Separar los datos en dos arrays
-        xpoblacio = datapoblacio[:, 0]
-        ypoblacio = datapoblacio[:, 1]
-
-        # Incorporar al grafico
-        plt.scatter(xpoblacio, ypoblacio, s=0.3, marker='o', color=colorPoblacion)
-
-        #Mostrar todo el gráfico
-        plt.show()
+    plt.title(f'Region coverage predicted by {fileGMM}')
+    plt.axis('tight')
+    plt.axis(limits)
+    plt.show()
 
 
 ########################################################################################################
@@ -193,34 +153,27 @@ USAGE='''
 Draws the regions in space covered with a certain probability by a GMM.
 
 Usage:
-    plotGMM [--help|-h] [options] <file-gmm> <file-txt> '<file-gmm2>' '<file-txt2>' [<file-feat>...]
+    plotGMM [--help|-h] [options] <file-gmm> [<file-feat>...]
 
 Options:
     --xDim INT, -x INT               'x' dimension to use from GMM and feature vectors [default: 0]
     --yDim INT, -y INT               'y' dimension to use from GMM and feature vectors [default: 1]
     --percents FLOAT..., -p FLOAT...  Percentages covered by the regions [default: 90,50]
     --colorGMM STR, -g STR            Color of the GMM regions boundaries [default: red]
-    --colorPoblacion STR, -r          Color of the poblation [default: red]
     --colorFEAT STR, -f STR           Color of the feature population [default: red]
     --limits xyLimits -l xyLimits     xyLimits are the four values xMin,xMax,yMin,yMax [default: auto]
 
     --help, -h                        Shows this message
 
 Arguments:
-    <file-txt>    File with the poblacion del usuario to be plotted
-    <file-txt2>
     <file-gmm>    File with the Gaussian mixture model to be plotted
-    <file-gmm2>
     <file-fear>   Feature files to be plotted along the GMM
 '''
 
 if __name__ == '__main__':
     args = docopt(USAGE)
 
-    fileTXT = args['<file-txt>']
-    fileTXT2 = args['<file-txt2>']
     fileGMM = args['<file-gmm>']
-    fileGMM2 = args['<file-gmm2>']
     filesFeat = args['<file-feat>']
     xDim = int(args['--xDim'])
     yDim = int(args['--yDim'])
@@ -229,7 +182,6 @@ if __name__ == '__main__':
         percents = percents.split(',')
         percents = np.array([float(percent) / 100 for percent in percents])
     colorGmm = args['--colorGMM']
-    colorPoblacion = args['--colorPoblacion']
     colorFeat = args['--colorFEAT']
     limits = args['--limits']
     if limits != 'auto':
@@ -240,7 +192,4 @@ if __name__ == '__main__':
     else:
         limits = None
 
-    
-    plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm, colorPoblacion, filesFeat, colorFeat, limits)
-    
-
+    plotGMM(fileGMM, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits, 111)

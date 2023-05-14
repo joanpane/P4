@@ -112,7 +112,7 @@ namespace upc
 
 		for (n=0; n<data.nrow(); ++n) {
 			/// \TODO Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
-			//DONE
+			///  \DONE
 			lprob += this->gmm_logprob(data[n]);
 		}
 		return lprob/data.nrow();
@@ -204,14 +204,13 @@ namespace upc
 
 		fmatrix weights(data.nrow(), nmix);
 		for (iteration=0; iteration<max_it; ++iteration) {
-			/// \TODO
-			// Complete the loop in order to perform EM, and implement the stopping criterion.
+			/// \TODO Complete the loop in order to perform EM, and implement the stopping criterion.
 			//
 			// EM loop: em_expectation + em_maximization.
 			//
 			// Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
 			// increase more than inc_threshold.
-			//DONE
+			/// \DONE Implemented
 			new_prob = this->em_expectation(data, weights); //devuelve la log probabilidad del material de entrenamiento
 			inc_prob = new_prob-old_prob;
 			old_prob = new_prob;
