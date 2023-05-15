@@ -50,8 +50,8 @@ MFCC_freq=8
 #Parametros para entrenar GMM
 TO_init_method=2         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
 TO_LogProb_th_fin=1.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
-TO_Num_it_fin=60        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
-TO_nmix=30               #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
+TO_Num_it_fin=20        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
+TO_nmix=8            #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
 
 TRAIN_OPTS="-i $TO_init_method -T $TO_LogProb_th_fin -N $TO_Num_it_fin -m $TO_nmix"
 # ------------------------
