@@ -91,34 +91,10 @@ def limsGMM(means, covs, fStd=3):
 
     return min_, max_
 
-def plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm, colorPoblacion, filesFeat=None, colorFeat=None, limits=None):
-    subplotting=[221,222,223,224]
-    for subplotting in subplotting:
-        subplot=subplotting 
-        if subplotting==221:
-            colorGmm='red'
-            colorPoblacion='red'
-            fileTXT = fileTXT
-            fileGMM = fileGMM
-        if subplotting==222:
-            colorGmm='red'
-            colorPoblacion='blue'
-            fileTXT = fileTXT2
-            fileGMM = fileGMM
-        if subplotting==223:
-            colorGmm='blue'
-            colorPoblacion='red'
-            fileTXT = fileTXT
-            fileGMM = fileGMM2
-        if subplotting==224:
-            colorGmm='blue'
-            colorPoblacion='blue'
-            fileTXT = fileTXT2
-            fileGMM = fileGMM2
-
-
+def plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat=None, colorFeat=None, limits=None, subplot=111):
         weights, means, covs = read_gmm(fileGMM)
 
+        
         ax = plt.subplot(subplot)
         if filesFeat:
             feats = np.ndarray((0, 2))
@@ -170,19 +146,6 @@ def plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm
 
 
 
-        ##PLOT DE LA POBLACION DEL ARCHIVO TXT
-        # Cargar los datos desde el archivo de texto
-        datapoblacio = np.loadtxt(fileTXT)
-
-        # Separar los datos en dos arrays
-        xpoblacio = datapoblacio[:, 0]
-        ypoblacio = datapoblacio[:, 1]
-
-        # Incorporar al grafico
-        plt.scatter(xpoblacio, ypoblacio, s=0.3, marker='o', color=colorPoblacion)
-
-        #Mostrar todo el gráfico
-        plt.show()
 
 
 ########################################################################################################
@@ -193,22 +156,19 @@ USAGE='''
 Draws the regions in space covered with a certain probability by a GMM.
 
 Usage:
-    plotGMM [--help|-h] [options] <file-gmm> <file-txt> <file-gmm2> <file-txt2> [<file-feat>...]
+    plotGMM2 [--help|-h] [options] <file-gmm> <file-gmm2> [<file-feat>...]
 
 Options:
     --xDim INT, -x INT               'x' dimension to use from GMM and feature vectors [default: 0]
     --yDim INT, -y INT               'y' dimension to use from GMM and feature vectors [default: 1]
     --percents FLOAT..., -p FLOAT...  Percentages covered by the regions [default: 90,50]
     --colorGMM STR, -g STR            Color of the GMM regions boundaries [default: red]
-    --colorPoblacion STR, -r          Color of the poblation [default: red]
     --colorFEAT STR, -f STR           Color of the feature population [default: red]
     --limits xyLimits -l xyLimits     xyLimits are the four values xMin,xMax,yMin,yMax [default: auto]
 
     --help, -h                        Shows this message
 
 Arguments:
-    <file-txt>    File with the poblacion del usuario to be plotted
-    <file-txt2>
     <file-gmm>    File with the Gaussian mixture model to be plotted
     <file-gmm2>
     <file-fear>   Feature files to be plotted along the GMM
@@ -217,8 +177,6 @@ Arguments:
 if __name__ == '__main__':
     args = docopt(USAGE)
 
-    fileTXT = args['<file-txt>']
-    fileTXT2 = args['<file-txt2>']
     fileGMM = args['<file-gmm>']
     fileGMM2 = args['<file-gmm2>']
     filesFeat = args['<file-feat>']
@@ -229,7 +187,6 @@ if __name__ == '__main__':
         percents = percents.split(',')
         percents = np.array([float(percent) / 100 for percent in percents])
     colorGmm = args['--colorGMM']
-    colorPoblacion = args['--colorPoblacion']
     colorFeat = args['--colorFEAT']
     limits = args['--limits']
     if limits != 'auto':
@@ -240,7 +197,29 @@ if __name__ == '__main__':
     else:
         limits = None
 
-    
-    plotGMM(fileTXT, fileGMM, fileTXT2, fileGMM2, xDim, yDim, percents, colorGmm, colorPoblacion, filesFeat, colorFeat, limits)
+
+
+    subplot =[221,222,223,224]
+    for subplot in subplot:
+        if subplot == 221:
+            colorGmm = 'red'
+            colorFeat = 'red'
+            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+        elif subplot==222:
+            colorGmm = 'red'
+            colorFeat = 'blue'
+            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+        elif subplot==223:
+            colorGmm = 'blue'
+            colorFeat = 'red'
+            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+        elif subplot==224:
+            colorGmm = 'blue'
+            colorFeat = 'blue'
+            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+        
+    plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+
+        
     
 
