@@ -41,7 +41,7 @@ TEMP_VERIF=$w/temp_${FEAT}_${name_exp}.log
 LPC_order=10
 #LPCC
 LPCC_order=30
-LPCC_cepstrum_order=27
+LPCC_cepstrum_order=29
 #MFCC
 MFCC_order=18
 MFCC_filter_bank=28
@@ -50,7 +50,7 @@ MFCC_freq=15
 
 #Parametros para entrenar GMM
 TO_nmix=29              #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
-TO_Num_it_fin=20        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
+TO_Num_it_fin=30        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
 TO_LogProb_th_fin=0.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
 TO_init_method=1         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
 
