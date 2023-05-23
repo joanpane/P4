@@ -39,7 +39,7 @@ TEMP_VERIF=$w/temp_${FEAT}_${name_exp}.log
 #LP
 LPC_order=10
 #LPCC
-LPCC_order=40
+LPCC_order=30
 LPCC_cepstrum_order=30
 #MFCC
 MFCC_order=14
@@ -48,20 +48,10 @@ MFCC_freq=16
 
 
 #Parametros para entrenar GMM
-<<<<<<< HEAD
-TO_init_method=2         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
-TO_LogProb_th_fin=1.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
-TO_Num_it_fin=35        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
-TO_nmix=95          #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
-=======
-TO_nmix=20            #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
-TO_Num_it_fin=20        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
-TO_LogProb_th_fin=0.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
 TO_init_method=1         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
-
-
-
->>>>>>> df120ddfe74b17519266ebfb6f6564b84e3beda7
+TO_LogProb_th_fin=0.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
+TO_Num_it_fin=40        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
+TO_nmix=90          #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
 
 TRAIN_OPTS="-i $TO_init_method -T $TO_LogProb_th_fin -N $TO_Num_it_fin -m $TO_nmix"
 # ------------------------
