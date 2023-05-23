@@ -197,6 +197,25 @@ if __name__ == '__main__':
     else:
         limits = None
 
+    #Separamos en distintos vectores porque filesFeat nos pasa un vector con todos los ficheros feat pasados como parámetro. (se podria con un for)
+    #Hace falta sustituir parte_igual1 i poner la ruta del primer fichero feat que pasemos en comando
+    parte_igual1 = "work/lp/BLOCK11/SES118/SA118"
+    feats_con_parte_igual =[]
+    for elemento in filesFeat:
+        if parte_igual1 in elemento:
+            feats_con_parte_igual.append(elemento)
+    
+    filesFeat1 = feats_con_parte_igual
+
+    #Hace falta sustituir parte_igual1 i poner la ruta del segundo fichero feat que pasemos en comando
+    parte_igual2 = "work/lp/BLOCK06/SES060/SA060"
+    feats_con_parte_igual2 =[]
+    for elemento in filesFeat:
+        if parte_igual2 in elemento:
+            feats_con_parte_igual2.append(elemento)
+    
+    filesFeat2 = feats_con_parte_igual2
+
 
 
     subplots =[221,222,223,224]
@@ -204,19 +223,19 @@ if __name__ == '__main__':
         if subplot == 221:
             colorGmm = 'red'
             colorFeat = 'red'
-            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat[0], colorFeat, limits,subplot)
+            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat1, colorFeat, limits,subplot)
         elif subplot==222:
             colorGmm = 'red'
             colorFeat = 'blue'
-            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat[1], colorFeat, limits,subplot)
+            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat2, colorFeat, limits,subplot)
         elif subplot==223:
             colorGmm = 'blue'
             colorFeat = 'red'
-            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat[0], colorFeat, limits,subplot)
+            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat1, colorFeat, limits,subplot)
         elif subplot==224:
             colorGmm = 'blue'
             colorFeat = 'blue'
-            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat[1], colorFeat, limits,subplot)
+            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat2, colorFeat, limits,subplot)
         
     plt.show()
     #plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
