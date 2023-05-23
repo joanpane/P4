@@ -23,6 +23,7 @@ w=work
 name_exp=one
 db_devel=spk_8mu/speecon
 db_test=spk_8mu/sr_test
+world=users_and_others
 
 # Ficheros de resultados del reconocimiento y verificación
 LOG_CLASS=$w/class_${FEAT}_${name_exp}.log
@@ -40,20 +41,22 @@ TEMP_VERIF=$w/temp_${FEAT}_${name_exp}.log
 LPC_order=10
 #LPCC
 LPCC_order=30
-LPCC_cepstrum_order=30
+LPCC_cepstrum_order=27
 #MFCC
-MFCC_order=14
-MFCC_filter_bank=24
-MFCC_freq=16
+MFCC_order=18
+MFCC_filter_bank=28
+MFCC_freq=15
 
 
 #Parametros para entrenar GMM
-TO_init_method=1         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
+TO_nmix=29              #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
+TO_Num_it_fin=20        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
 TO_LogProb_th_fin=0.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
-TO_Num_it_fin=40        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
-TO_nmix=90          #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
+TO_init_method=1         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
+
 
 TRAIN_OPTS="-i $TO_init_method -T $TO_LogProb_th_fin -N $TO_Num_it_fin -m $TO_nmix"
+
 # ------------------------
 # Usage
 # ------------------------
@@ -159,7 +162,7 @@ for cmd in $*; do
            name=${dir/*\/}
            echo $name ----
            EXEC="gmm_train -v 1 $TRAIN_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train" 
-           echo $EXEC && $EXEC || exit 1
+           echo $EXEC && $EXEC > /dev/null || exit 1
            echo
        done
    elif [[ $cmd == test ]]; then
@@ -185,7 +188,7 @@ for cmd in $*; do
        #
        # - The name of the world model will be used by gmm_verify in the 'verify' command below.
        # \DONE
-       gmm_train  -v 1 $WORLD_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
+       gmm_train  -v 1 $TRAIN_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm $lists/verif/$world.train || exit 1
 
    elif [[ $cmd == verify ]]; then
        ## @file
@@ -218,8 +221,8 @@ for cmd in $*; do
        # El fichero con el resultado del reconocimiento debe llamarse $FINAL_CLASS, que deberá estar en el
        # directorio de la práctica (PAV/P4).
        #DONE
-        compute_$FEAT $db_final $lists/final/class.test
-       (gmm_classify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm $lists/gmm.list $lists/final/class.test | tee class_test.log) || exit 1
+        compute_$FEAT $db_test/spk_cls $lists/final/class.test
+       (gmm_classify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm $lists/gmm.list $lists/final/class.test | tee $FINAL_CLASS) || exit 1
    
    elif [[ $cmd == finalverif ]]; then
        ## @file
@@ -238,13 +241,15 @@ for cmd in $*; do
        # candidato para la señal a verificar. En $FINAL_VERIF se pide que la tercera columna sea 1,
        # si se considera al candidato legítimo, o 0, si se considera impostor. Las instrucciones para
        # realizar este cambio de formato están en el enunciado de la práctica.
-       #DONE
-        compute_$FEAT $db_final $lists/final/verif.test
-       gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world lists/final/verif.users lists/final/verif.test lists/final/verif.test.candidates | tee $w/verif_test.log
+       # \DONE
+        if true; then echo "OJO, ajustar el ubral"; exit 0; fi
+        compute_$FEAT $db_test $lists/final/verif.test
+        gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world lists/final/verif.users lists/final/verif.test lists/final/verif.test.candidates | tee $TEMP_VERIF
+        
         #$F[2]> canviar valor per minimitzar el cost (thd) optim (0.974854913166401)
         perl -ane 'print "$F[0]\t$F[1]\t";
             if ($F[2] > 0.392219510702497) {print "1\n"}
-            else {print "0\n"}' $w/verif_test.log | tee verif_test.log
+            else {print "0\n"}' $TEMP_VERIF | tee $FINAL_VERIF
    
    # If the command is not recognize, check if it is the name
    # of a feature and a compute_$FEAT function exists.

@@ -171,7 +171,7 @@ Options:
 Arguments:
     <file-gmm>    File with the Gaussian mixture model to be plotted
     <file-gmm2>
-    <file-fear>   Feature files to be plotted along the GMM
+    <file-feat>   Feature files to be plotted along the GMM
 '''
 
 if __name__ == '__main__':
@@ -204,19 +204,19 @@ if __name__ == '__main__':
         if subplot == 221:
             colorGmm = 'red'
             colorFeat = 'red'
-            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat[0], colorFeat, limits,subplot)
         elif subplot==222:
             colorGmm = 'red'
             colorFeat = 'blue'
-            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+            plotGMM2(fileGMM, xDim, yDim, percents, colorGmm, filesFeat[1], colorFeat, limits,subplot)
         elif subplot==223:
             colorGmm = 'blue'
             colorFeat = 'red'
-            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat[0], colorFeat, limits,subplot)
         elif subplot==224:
             colorGmm = 'blue'
             colorFeat = 'blue'
-            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+            plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat[1], colorFeat, limits,subplot)
         
     plt.show()
     #plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
