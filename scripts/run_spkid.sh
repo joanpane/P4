@@ -42,16 +42,16 @@ LPC_order=14
 LPCC_order=15
 LPCC_cepstrum_order=14
 #MFCC
-MFCC_order=20
-MFCC_filter_bank=30
-MFCC_freq=8
+MFCC_order=14
+MFCC_filter_bank=24
+MFCC_freq=16
 
 
 #Parametros para entrenar GMM
 TO_init_method=2         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
 TO_LogProb_th_fin=1.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
-TO_Num_it_fin=20        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
-TO_nmix=8            #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
+TO_Num_it_fin=35        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
+TO_nmix=95          #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
 
 TRAIN_OPTS="-i $TO_init_method -T $TO_LogProb_th_fin -N $TO_Num_it_fin -m $TO_nmix"
 # ------------------------
@@ -159,7 +159,7 @@ for cmd in $*; do
            name=${dir/*\/}
            echo $name ----
            EXEC="gmm_train -v 1 $TRAIN_OPTS -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train" 
-           echo $EXEC && $EXEC > /dev/null || exit 1
+           echo $EXEC && $EXEC || exit 1
            echo
        done
    elif [[ $cmd == test ]]; then

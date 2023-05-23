@@ -199,8 +199,8 @@ if __name__ == '__main__':
 
 
 
-    subplot =[221,222,223,224]
-    for subplot in subplot:
+    subplots =[221,222,223,224]
+    for subplot in subplots:
         if subplot == 221:
             colorGmm = 'red'
             colorFeat = 'red'
@@ -218,7 +218,8 @@ if __name__ == '__main__':
             colorFeat = 'blue'
             plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
         
-    plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
+    plt.show()
+    #plotGMM2(fileGMM2, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits,subplot)
 
         
     
