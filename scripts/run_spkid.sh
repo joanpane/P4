@@ -37,10 +37,10 @@ TEMP_VERIF=$w/temp_${FEAT}_${name_exp}.log
 
 #Parametros para la parametrización
 #LP
-LPC_order=14
+LPC_order=10
 #LPCC
-LPCC_order=15
-LPCC_cepstrum_order=14
+LPCC_order=40
+LPCC_cepstrum_order=30
 #MFCC
 MFCC_order=20
 MFCC_filter_bank=30
@@ -48,10 +48,13 @@ MFCC_freq=8
 
 
 #Parametros para entrenar GMM
-TO_init_method=2         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
-TO_LogProb_th_fin=1.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
+TO_nmix=20            #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
 TO_Num_it_fin=20        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
-TO_nmix=8            #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
+TO_LogProb_th_fin=0.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
+TO_init_method=1         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
+
+
+
 
 TRAIN_OPTS="-i $TO_init_method -T $TO_LogProb_th_fin -N $TO_Num_it_fin -m $TO_nmix"
 # ------------------------
@@ -112,7 +115,7 @@ compute_lpcc(){
     shift
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lpcc $LPCC_order $LPCC_cepstrum_order 14 $db/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2lpcc $LPCC_order $LPCC_cepstrum_order $db/$filename.wav $w/$FEAT/$filename.$FEAT"
         echo $EXEC && $EXEC || exit 1
     done
 }
