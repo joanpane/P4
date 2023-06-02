@@ -211,14 +211,14 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
   |    Parametros          | LP    | LPCC  |  MFCC |
   |------------------------|:-----:|:-----:|:-----:|
-  | FEAT order             |   X   |   30  |   X   |
+  | FEAT order             |   10  |   30  |   X   |
   | Cepstrum order         |   -   |   29  |   -   |
   | Filter bank            |   -   |   -   |   X   |
   | Frequency              |   -   |   -   |   X   |
-  | Nº of Mixtures         |   X   |   27  |   X   |
-  | Max Iterations         |   X   |   20  |   X   |
-  | Inicialization         |   X   |   VQ  |   X   |
-  | Tasa de error          |  100% | 0.13% |  100% |
+  | Nº of Mixtures         |   29  |   27  |   X   |
+  | Max Iterations         |   31  |   20  |   X   |
+  | Inicialization         |   EM  |   VQ  |   X   |
+  | Tasa de error          | 8.15% | 0.13% |  100% |
 
 ### Verificación del locutor.
 
@@ -232,13 +232,13 @@ Complete el código necesario para realizar verificación del locutor y optimice
   |    Parametros          | LP    | LPCC  |  MFCC |
   |------------------------|:-----:|:-----:|:-----:|
   |Tasa de error (Classify)|  100% | 0.13% |  100% |
-  | Nº of Mixtures (World) |   X   |   28  |   X   |
-  | Max Iterations (World) |   X   |   30  |   X   |
-  | Inicialization (World) |   X   |   VQ  |   X   |
-  | Misses                 |   X   |   4   |   X   |
-  | False Alarms           |   X   |   3   |   X   |
-  | Optimum Threshold      |   X   |   0.162265165939597   |   X   |
-  | CostDetection          |   X   |   4.3   |   X   |
+  | Nº of Mixtures (World) |   35  |   28  |   X   |
+  | Max Iterations (World) |   35  |   30  |   X   |
+  | Inicialization (World) |   VQ  |   VQ  |   X   |
+  | Misses                 |   81  |   4   |   X   |
+  | False Alarms           |   9   |   3   |   X   |
+  | Optimum Threshold      |0.34930923252200|0.162265165939597|   X   |
+  | CostDetection          |   40.5   |   4.3   |   X   |
   
  
 ### Test final
