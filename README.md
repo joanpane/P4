@@ -211,14 +211,14 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
   |    Parametros          | LP    | LPCC  |  MFCC |
   |------------------------|:-----:|:-----:|:-----:|
-  | FEAT order             |   X   |   30  |   X   |
+  | FEAT order             |   X   |   30  |   18   |
   | Cepstrum order         |   -   |   29  |   -   |
-  | Filter bank            |   -   |   -   |   X   |
-  | Frequency              |   -   |   -   |   X   |
-  | Nº of Mixtures         |   X   |   27  |   X   |
-  | Max Iterations         |   X   |   20  |   X   |
-  | Inicialization         |   X   |   VQ  |   X   |
-  | Tasa de error          |  100% | 0.13% |  100% |
+  | Filter bank            |   -   |   -   |   26   |
+  | Frequency              |   -   |   -   |   16   |
+  | Nº of Mixtures         |   X   |   27  |   30   |
+  | Max Iterations         |   X   |   20  |   30   |
+  | Inicialization         |   X   |   VQ  |   VQ   |
+  | Tasa de error          |  100% | 0.13% |  1.02% |
 
 ### Verificación del locutor.
 
@@ -235,10 +235,10 @@ Complete el código necesario para realizar verificación del locutor y optimice
   | Nº of Mixtures (World) |   X   |   28  |   X   |
   | Max Iterations (World) |   X   |   30  |   X   |
   | Inicialization (World) |   X   |   VQ  |   X   |
-  | Misses                 |   X   |   4   |   X   |
-  | False Alarms           |   X   |   3   |   X   |
-  | Optimum Threshold      |   X   |   0.162265165939597   |   X   |
-  | CostDetection          |   X   |   4.3   |   X   |
+  | Misses                 |   X   |   4   |   23   |
+  | False Alarms           |   X   |   3   |   4   |
+  | Optimum Threshold      |   X   |   0.162265165939597   |   0.622179747163205   |
+  | CostDetection          |   X   |   4.3   |   12.8   |
   
  
 ### Test final

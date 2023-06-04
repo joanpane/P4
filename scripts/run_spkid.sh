@@ -44,12 +44,12 @@ LPCC_order=30
 LPCC_cepstrum_order=29
 #MFCC
 MFCC_order=18
-MFCC_filter_bank=28
-MFCC_freq=15
+MFCC_filter_bank=26
+MFCC_freq=16
 
 
 #Parametros para entrenar GMM
-TO_nmix=29              #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
+TO_nmix=30              #-m mix\tNumber of mixtures (def. " << DEF_NMIXTURES << ")
 TO_Num_it_fin=30        #-N ite\tNumber of final iterations of EM (def. " << DEF_ITERATIONS << ")
 TO_LogProb_th_fin=0.e-6  #-T thr\tLogProbability threshold of final EM iterations (def. " << DEF_THR << ")
 TO_init_method=1         #-i init\tInitialization method: 0=random, 1=VQ, 2=EM split (def. 0)   
