@@ -40,7 +40,7 @@ TEMP_VERIF=$w/temp_${FEAT}_${name_exp}.log
 #LP
 LPC_order=10
 #LPCC
-LPCC_order=30
+LPCC_order=25
 LPCC_cepstrum_order=29
 #MFCC
 MFCC_order=18
