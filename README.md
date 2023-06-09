@@ -212,14 +212,14 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
   
   |    Parametros          | LP    | LPCC  |  MFCC |
   |------------------------|:-----:|:-----:|:-----:|
-  | FEAT order             |   X   |   30  |   18   |
+  | FEAT order             |   10   |   30  |   18   |
   | Cepstrum order         |   -   |   29  |   -   |
   | Filter bank            |   -   |   -   |   26   |
   | Frequency              |   -   |   -   |   16   |
-  | Nº of Mixtures         |   X   |   27  |   30   |
-  | Max Iterations         |   X   |   20  |   30   |
-  | Inicialization         |   X   |   VQ  |   VQ   |
-  | Tasa de error          |  100% | 0.13% |  1.02% |
+  | Nº of Mixtures         |   29   |   27  |   30   |
+  | Max Iterations         |   31   |   20  |   30   |
+  | Inicialization         |   EM   |   VQ  |   VQ   |
+  | Tasa de error          |  8.15% | 0.13% |  1.02% |
 
 ### Verificación del locutor.
 
@@ -232,20 +232,21 @@ Complete el código necesario para realizar verificación del locutor y optimice
 
   |    Parametros          | LP    | LPCC  |  MFCC |
   |------------------------|:-----:|:-----:|:-----:|
-  |Tasa de error (Classify)|  100% | 0.13% |  100% |
-  | Nº of Mixtures (World) |   X   |   28  |   X   |
-  | Max Iterations (World) |   X   |   30  |   X   |
-  | Inicialization (World) |   X   |   VQ  |   X   |
-  | Misses                 |   X   |   4   |   23   |
-  | False Alarms           |   X   |   3   |   4   |
-  | Optimum Threshold      |   X   |   0.162265165939597   |   0.622179747163205   |
-  | CostDetection          |   X   |   4.3   |   12.8   |
+  |Tasa de error (Classify)|  8.15% | 0.13% |  1.02% |
+  | Nº of Mixtures (World) |   35   |   29  |   30   |
+  | Max Iterations (World) |   35  |   30  |   30   |
+  | Inicialization (World) |   VQ  |   VQ  |   VQ   |
+  | Misses                 |   81   |   4   |   23   |
+  | False Alarms           |   9   |   3   |   4   |
+  | Optimum Threshold      |0.349309232522008|0.162269156593922|0.622179747163205|
+  | CostDetection          |   40.5   |   4.3   |   12.8   |
   
  
 ### Test final
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
   correspondientes a la evaluación *ciega* final.
+
 
 ### Trabajo de ampliación.
 
